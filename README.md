@@ -82,3 +82,23 @@ The full query is in [`sql/analysis.sql`](sql/analysis.sql). It demonstrates a `
 ## Portfolio note
 
 This repository is an independently developed educational project, **not affiliated with or endorsed by the Los Angeles Dodgers or MLB**. If using this in a job application, describe what you personally understand and can explain, and be transparent about any assisted code generation.
+
+## Interactive dashboard (Streamlit)
+
+A browser-based dashboard adds interactive **birth-country**, **season**, and **player-name** filters, with country representation, year-by-year mean rates, an OPS-versus-playing-time scatter plot, downloadable filtered records, and a data-quality panel. Every displayed statistic is based on the pipeline outputs. It does **not** perform international prospect evaluation.
+
+Run from the repository root on Windows (or another platform with Python 3.10+):
+
+```bash
+python -m pip install -r requirements.txt
+python -m src.pipeline --download
+python -m streamlit run dashboard.py
+```
+
+Streamlit will open a local browser page, usually at `http://localhost:8501`. If the `outputs/` files are missing, the app gives you the pipeline command rather than inventing sample results. You do not need to download the original files again if `data/Batting.csv` and `data/People.csv` already exist; you can use `python -m src.pipeline` without the `--download` flag.
+
+**Interpretation:** The bar chart counts *qualifying player-seasons*. The mean OPS/OBP/SLG chart is an **unweighted** average of already-rounded individual player-season rates, not a pooled or park-adjusted performance measure. Changing filters changes the sample and can substantially affect apparent trends. Data are loaded locally; the app does not submit them to a third-party service.
+
+**Tests:** `python -m unittest discover -s tests -v` includes dashboard data/filter tests in addition to pipeline tests.
+
+**GitHub tip:** Once your dashboard runs using real data, take a screenshot and add it to `docs/` if you want to show a genuine preview in the README. No example chart or generated sample performance is presented as real.
